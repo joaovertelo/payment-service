@@ -1,12 +1,14 @@
 package com.devertelo.payment.controller;
 
-import com.devertelo.springswaggercodegen3.api.PaymentsApi;
-import com.devertelo.springswaggercodegen3.model.PaymentApiRequest;
-import com.devertelo.springswaggercodegen3.model.PaymentApiResponse;
+import com.devertelo.payment.api.PaymentsApi;
+import com.devertelo.payment.model.PaymentApiRequest;
+import com.devertelo.payment.model.PaymentApiResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@RestController
 public class PaymentController implements PaymentsApi {
 
     @Override
@@ -18,6 +20,4 @@ public class PaymentController implements PaymentsApi {
     public ResponseEntity<PaymentApiResponse> createPayment(PaymentApiRequest paymentApiRequest) {
         return PaymentsApi.super.createPayment(paymentApiRequest);
     }
-
-
 }
