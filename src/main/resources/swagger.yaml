@@ -1,0 +1,255 @@
+openapi: 3.0.3
+info:
+  title: Swagger Users - OpenAPI 3.0
+  description: |-
+    This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about
+    Swagger at [https://swagger.io](https://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!
+  version: 1.0.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: users
+    description: Operations about user
+  - name: payments
+    description: Payments operations
+paths:
+  /payments:
+    post:
+      tags:
+        - payments
+      summary: Create a payment
+      description: Create a payment.
+      operationId: createPayment
+      requestBody:
+        description: Created payment
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentApiRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentApiResponse'
+    get:
+      tags:
+        - payments
+      summary: Get all payments.
+      description: ''
+      operationId: getAllPayments
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentApiResponse'
+  /users:
+    post:
+      tags:
+        - users
+      summary: Create user
+      description: Create a user.
+      operationId: createUser
+      requestBody:
+        description: Created user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+    get:
+      tags:
+        - users
+      summary: Get all users.
+      description: ''
+      operationId: getAllUsers
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserResponse'
+  /users/{id}:
+    get:
+      tags:
+        - users
+      summary: Get user by id
+      description: ''
+      operationId: getUserById
+      parameters:
+        - name: id
+          in: path
+          description: 'id of user '
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: User not found
+    put:
+      tags:
+        - users
+      summary: Update user
+      operationId: updateUser
+      parameters:
+        - name: id
+          in: path
+          description: id that need to be deleted
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update an existent user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          description: User not found
+    delete:
+      tags:
+        - users
+      summary: Delete user
+      operationId: deleteUser
+      parameters:
+        - name: id
+          in: path
+          description: Id that needs to be deleted
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: user deleted
+        '404':
+          description: User not found
+components:
+  schemas:
+    PaymentApiRequest:
+      type: object
+      required:
+        - amount
+        - type
+      properties:
+        amount:
+          type: integer
+          description: Amount in integer cents.
+          example: 100
+        type:
+          type: string
+          example: DEBIT
+          enum: [DEBIT, CREDIT]
+        installments:
+          type: integer
+          example: 1
+    PaymentApiResponse:
+      type: object
+      properties:
+        id:
+          type: String
+          description: Payment id
+          example: 76f2b923-109d-4f72-b2b9-23109d2f72cf
+        amount:
+          type: integer
+          description: Amount in integer cents.
+          example: 100
+        type:
+          type: string
+          example: DEBIT
+          enum: [DEBIT, CREDIT]
+        installments:
+          type: integer
+          example: 1
+        createdAt:
+          type: string
+          format: date-time
+    UserRequest:
+      type: object
+      required:
+        - username
+        - name
+      properties:
+        username:
+          type: string
+          example: theUser
+        name:
+          type: string
+          example: John
+          minLength: 3
+          maxLength: 20
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+        status:
+          $ref: '#/components/schemas/UserStatus'
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: f0822b54-0720-11ee-be56-0242ac120002
+        username:
+          type: string
+          example: theUser
+        name:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: James
+        email:
+          type: string
+          example: john@email.com
+        password:
+          type: string
+          example: '12345'
+        status:
+          $ref: '#/components/schemas/UserStatus'
+        createdAt:
+          type: string
+          description: create date
+          format: date-time
+    UserStatus:
+      type: string
+      description: User Status
+      enum: [ ACTIVE, INACTIVE ]
+      example: ACTIVE
