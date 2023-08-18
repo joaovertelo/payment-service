@@ -48,9 +48,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/PaymentApiResponse'
+                $ref: '#/components/schemas/PaginatedPaymentsApiResponse'
   /users:
     post:
       tags:
@@ -163,7 +161,12 @@ components:
       required:
         - amount
         - type
+        - userId
       properties:
+        userId:
+          type: integer
+          description: id of user
+          example: 1
         amount:
           type: integer
           description: Amount in integer cents.
@@ -171,10 +174,37 @@ components:
         type:
           type: string
           example: DEBIT
-          enum: [DEBIT, CREDIT]
+          enum: [ DEBIT, CREDIT ]
         installments:
           type: integer
           example: 1
+    PaginatedPaymentsApiResponse:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: number of page
+          example: 1
+        size:
+          type: integer
+          description: size of results
+          example: 10
+        total:
+          type: integer
+          description: total of results
+          example: 25
+        totalPages:
+          type: integer
+          description: total number of pages
+          example: 3
+        hasNext:
+          type: boolean
+          description: contains next page
+          example: true
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentApiResponse'
     PaymentApiResponse:
       type: object
       properties:
@@ -189,7 +219,7 @@ components:
         type:
           type: string
           example: DEBIT
-          enum: [DEBIT, CREDIT]
+          enum: [ DEBIT, CREDIT ]
         installments:
           type: integer
           example: 1
